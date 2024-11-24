@@ -1,0 +1,6 @@
+fastapi==0.95.1
+uvicorn==0.22.0
+sqlalchemy==1.4.46
+mysql-connector==8.0.31
+pydantic[email]==1.10.7
+itsdangerous==2.1.2

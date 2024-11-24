@@ -1,0 +1,42 @@
+.book-details-page {
+    margin-top: 20px;
+}
+
+.book-details-page h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.book-details-page p {
+    font-size: 1.1em;
+}
+
+.book-details-page .price {
+    color: #B12704;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.book-details-page .stock {
+    color: #007600;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.book-details-page .btn-success {
+    margin-top: 15px;
+}
+
+.book-details-page img {
+    max-width: 100%;
+}
+
+@media (max-width: 768px) {
+    .book-details-page {
+        text-align: center;
+    }
+
+    .book-details-page .btn-success {
+        width: 100%;
+    }
+}
