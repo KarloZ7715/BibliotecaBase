@@ -28,9 +28,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.add_middleware(
-    SessionMiddleware, secret_key="127a2j3k4l5k6j7h8g9f0d1s2a3d4f5g6h7j8k9l0"
-)
+app.add_middleware(SessionMiddleware, secret_key="!secret")
 
 app.include_router(autores.router)
 app.include_router(categorias.router)
