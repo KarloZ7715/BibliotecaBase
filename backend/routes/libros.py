@@ -46,6 +46,47 @@ def get_random_books(limit: int = Query(5, ge=1, le=10), db: Session = Depends(g
     return random_books
 
 
+@router.get("/buscar", response_model=List[schemas.Libro])
+def buscar_libros(query: str, filter: str = "Todo", db: Session = Depends(get_db)):
+    if filter == "Título":
+        libros = (
+            db.query(models.Libro)
+            .options(joinedload(models.Libro.autor), joinedload(models.Libro.categoria))
+            .filter(models.Libro.titulo.ilike(f"%{query}%"))
+            .all()
+        )
+    elif filter == "Autor":
+        libros = (
+            db.query(models.Libro)
+            .join(models.Autor)
+            .options(joinedload(models.Libro.autor), joinedload(models.Libro.categoria))
+            .filter(models.Autor.nombre.ilike(f"%{query}%"))
+            .all()
+        )
+    elif filter == "Género":
+        libros = (
+            db.query(models.Libro)
+            .join(models.Categoria)
+            .options(joinedload(models.Libro.autor), joinedload(models.Libro.categoria))
+            .filter(models.Categoria.nombre_categoria.ilike(f"%{query}%"))
+            .all()
+        )
+    else:
+        libros = (
+            db.query(models.Libro)
+            .join(models.Autor)
+            .join(models.Categoria)
+            .options(joinedload(models.Libro.autor), joinedload(models.Libro.categoria))
+            .filter(
+                (models.Libro.titulo.ilike(f"%{query}%"))
+                | (models.Autor.nombre.ilike(f"%{query}%"))
+                | (models.Categoria.nombre_categoria.ilike(f"%{query}%"))
+            )
+            .all()
+        )
+    return libros
+
+
 @router.get("/{id_libro}", response_model=schemas.Libro)
 def obtener_libro(id_libro: int, db: Session = Depends(get_db)):
     libro = (
@@ -57,38 +98,6 @@ def obtener_libro(id_libro: int, db: Session = Depends(get_db)):
     if not libro:
         raise HTTPException(status_code=404, detail="Libro no encontrado")
     return libro
-
-
-@router.get("/buscar", response_model=List[schemas.Libro])
-def buscar_libros(query: str, filter: str = "Todo", db: Session = Depends(get_db)):
-    if filter == "Título":
-        libros = (
-            db.query(models.Libro).filter(models.Libro.titulo.ilike(f"%{query}%")).all()
-        )
-    elif filter == "Autor":
-        libros = (
-            db.query(models.Libro)
-            .join(models.Autor)
-            .filter(models.Autor.nombre.ilike(f"%{query}%"))
-            .all()
-        )
-    elif filter == "Género":
-        libros = (
-            db.query(models.Libro)
-            .join(models.Categoria)
-            .filter(models.Categoria.nombre_categoria.ilike(f"%{query}%"))
-            .all()
-        )
-    else:
-        libros = (
-            db.query(models.Libro)
-            .filter(
-                models.Libro.titulo.ilike(f"%{query}%")
-                | models.Libro.descripcion.ilike(f"%{query}%")
-            )
-            .all()
-        )
-    return libros
 
 
 @router.put("/{id_libro}", response_model=schemas.Libro)

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Navbar, Button, Container, Row, Col, Carousel } from 'react-bootstrap';
+import { Button, Container, Row, Col } from 'react-bootstrap';
 import { FaFacebookF, FaTwitter, FaInstagram } from 'react-icons/fa';
-import BookCarousel from '../components/BookCarousel';
-import '../styles/Home.css';
 import { fetchRandomBooks } from '../api';
+import BookCarousel from '../components/BookCarousel';
+import HeroBanner from '../components/HeroBanner';
+import Categories from '../components/Categories';
+import '../styles/Home.css';
+
 
 function Home() {
     const [books, setBooks] = useState([]);
@@ -24,34 +27,7 @@ function Home() {
     return (
         <div className="home-background">
             {/* Banner Principal */}
-            <section className="hero-section">
-                <Carousel>
-                    <Carousel.Item>
-                        <img
-                            className="d-block w-100"
-                            src="ruta/a/tu/imagen1.jpg"
-                            alt="Primera promoción"
-                        />
-                        <Carousel.Caption>
-                            <h3>Nueva Colección de Fantasía</h3>
-                            <p>Descubre los mundos mágicos más recientes.</p>
-                            <Button variant="primary">Explorar</Button>
-                        </Carousel.Caption>
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <img
-                            className="d-block w-100"
-                            src="ruta/a/tu/imagen2.jpg"
-                            alt="Segunda promoción"
-                        />
-                        <Carousel.Caption>
-                            <h3>Best Sellers del Mes</h3>
-                            <p>Los libros más vendidos que no te puedes perder.</p>
-                            <Button variant="primary">Ver Más</Button>
-                        </Carousel.Caption>
-                    </Carousel.Item>
-                </Carousel>
-            </section>
+            <HeroBanner />
 
             {/* Libros Destacados */}
             <Container className="mt-5">
@@ -77,29 +53,6 @@ function Home() {
                         ))}
                     </Row>
                 )}
-            </Container>
-
-            {/* Categorías */}
-            <Container className="mt-5">
-                <h2 className="section-title">Categorías</h2>
-                <Row>
-                    <Col md={3} sm={6} className="category-card">
-                        <img src="ruta/a/categoria1.jpg" alt="Categoría 1" className="category-image" />
-                        <h5>Ficción</h5>
-                    </Col>
-                    <Col md={3} sm={6} className="category-card">
-                        <img src="ruta/a/categoria2.jpg" alt="Categoría 2" className="category-image" />
-                        <h5>Acción</h5>
-                    </Col>
-                    <Col md={3} sm={6} className="category-card">
-                        <img src="ruta/a/categoria3.jpg" alt="Categoría 3" className="category-image" />
-                        <h5>Biografías</h5>
-                    </Col>
-                    <Col md={3} sm={6} className="category-card">
-                        <img src="ruta/a/categoria4.jpg" alt="Categoría 4" className="category-image" />
-                        <h5>Ciencia</h5>
-                    </Col>
-                </Row>
             </Container>
 
             {/* Nuevas Llegadas */}
@@ -133,7 +86,11 @@ function Home() {
                 </Row>
             </Container>
 
+            {/* Componentes de Carrusel de Libros */}
             <BookCarousel title="Otro Set de Libros Destacados" limit={5} />
+
+            {/* Categorías */}
+            <Categories />
 
             {/* Footer */}
             <footer className="footer-section">
@@ -168,9 +125,9 @@ function Home() {
                         <Col md={3} sm={6}>
                             <h5>Mi Cuenta</h5>
                             <ul>
-                                <li><a href="#">Iniciar Sesión</a></li>
-                                <li><a href="#">Registrarse</a></li>
-                                <li><a href="#">Carrito</a></li>
+                                <li><a href="/login">Iniciar Sesión</a></li>
+                                <li><a href="/register">Registrarse</a></li>
+                                <li><a href="/carrito">Carrito</a></li>
                             </ul>
                         </Col>
                     </Row>

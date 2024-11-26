@@ -25,7 +25,7 @@ def registrar_usuario(usuario: schemas.UsuarioCreate, db: Session = Depends(get_
         direccion=usuario.direccion,
         telefono=usuario.telefono,
         rol="cliente",
-        fecha_registros=datetime.now(),
+        fecha_registro=datetime.now(),
     )
     db.add(nuevo_usuario)
     db.commit()
@@ -35,7 +35,7 @@ def registrar_usuario(usuario: schemas.UsuarioCreate, db: Session = Depends(get_
 
 @router.post("/login", response_model=schemas.Usuario)
 def login(
-    form_data: schemas.UsuarioCreate,
+    form_data: schemas.Login,
     request: Request,
     response: Response,
     db: Session = Depends(get_db),
@@ -57,3 +57,16 @@ def login(
 def logout(request: Request, response: Response):
     request.session.pop("user_id", None)
     return {"detail": "Desconectado exitosamente"}
+
+
+@router.get("/me", response_model=schemas.Usuario)
+def leer_usuario_actual(request: Request, db: Session = Depends(get_db)):
+    user_id = request.session.get("user_id")
+    if not user_id:
+        raise HTTPException(status_code=401, detail="No autenticado")
+    usuario = (
+        db.query(models.Usuario).filter(models.Usuario.id_usuario == user_id).first()
+    )
+    if not usuario:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    return usuario

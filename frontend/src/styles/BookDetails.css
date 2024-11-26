@@ -9,6 +9,7 @@
 
 .book-details-page p {
     font-size: 1.1em;
+    margin-bottom: 5px;
 }
 
 .book-details-page .price {
@@ -31,6 +32,16 @@
     max-width: 100%;
 }
 
+.book-details-page .shop_btn {
+    width: 200px !important;
+    height: 50px !important;
+    font-size: 1em;
+}
+
+.book-details {
+    margin-top: 15px;
+}
+
 @media (max-width: 768px) {
     .book-details-page {
         text-align: center;
@@ -38,5 +49,13 @@
 
     .book-details-page .btn-success {
         width: 100%;
+    }
+
+    .book-details-page .shop_btn {
+        width: 100%;
+    }
+
+    .book-details {
+        margin-top: 10px;
     }
 }

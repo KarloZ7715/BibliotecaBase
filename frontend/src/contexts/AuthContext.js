@@ -1,27 +1,51 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
+import { logoutUsuario, obtenerUsuarioActual } from '../api';
+import { useNavigate } from 'react-router-dom';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [auth, setAuth] = useState({
-        token: localStorage.getItem('token') || null,
-        usuario: JSON.parse(localStorage.getItem('usuario')) || null,
-    });
+    const [user, setUser] = useState(null);
+    const [cargando, setCargando] = useState(true);
+    const navigate = useNavigate();
 
-    const login = (token, usuario) => {
-        localStorage.setItem('token', token);
-        localStorage.setItem('usuario', JSON.stringify(usuario));
-        setAuth({ token, usuario });
+    const login = (userData) => {
+        setUser(userData);
     };
 
-    const logout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('usuario');
-        setAuth({ token: null, usuario: null });
+    const logout = async () => {
+        try {
+            await logoutUsuario();
+            setUser(null);
+            navigate('/login');
+        } catch (error) {
+            console.error('Error al cerrar sesión:', error);
+        }
     };
+
+    const verificarUsuario = async () => {
+        try {
+            const data = await obtenerUsuarioActual();
+            setUser(data);
+        } catch (error) {
+            setUser(null);
+        } finally {
+            setCargando(false);
+        }
+    };
+
+    useEffect(() => {
+        verificarUsuario();
+    }, []);
 
     return (
-        <AuthContext.Provider value={{ auth, login, logout }}>
+        <AuthContext.Provider value={{
+            user,
+            isAuthenticated: !!user,
+            login,
+            logout,
+            cargando
+        }}>
             {children}
         </AuthContext.Provider>
     );

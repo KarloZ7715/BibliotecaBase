@@ -153,6 +153,11 @@ class Tarjeta(TarjetaBase):
         orm_mode = True
 
 
+class Login(BaseModel):
+    correo: EmailStr
+    contraseña: str
+
+
 class RegistroBase(BaseModel):
     accion: str
     detalles: Optional[str] = None
