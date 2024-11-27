@@ -47,6 +47,37 @@ export const logoutUsuario = async () => {
     }
 };
 
+export const obtenerCarrito = async () => {
+    const response = await axiosInstance.get('/carrito/');
+    return response.data;
+};
+
+export const agregarAlCarrito = async (id_libro) => {
+    const response = await axiosInstance.post('/carrito/agregar', null, {
+        params: { id_libro },
+    });
+    return response.data;
+};
+
+export const actualizarCantidadCarrito = async (id_libro, cantidad) => {
+    const response = await axiosInstance.put('/carrito/actualizar', null, {
+        params: { id_libro, cantidad },
+    });
+    return response.data;
+};
+
+export const eliminarDelCarrito = async (id_libro) => {
+    const response = await axiosInstance.delete('/carrito/eliminar', {
+        params: { id_libro },
+    });
+    return response.data;
+};
+
+export const vaciarCarrito = async () => {
+    const response = await axiosInstance.delete('/carrito/vaciar');
+    return response.data;
+};
+
 export const fetchRandomBooks = async (limit) => {
     try {
         const response = await axiosInstance.get(`/libros/random?limit=${limit}`);

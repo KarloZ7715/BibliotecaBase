@@ -20,9 +20,24 @@
 
 .section-title {
     text-align: center;
-    margin-bottom: 30px;
-    font-size: 2rem;
-    font-weight: bold;
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    width: 60px;
+    height: 4px;
+    background-color: var(--color-accent);
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    transform: translateX(-50%);
+    border-radius: 2px;
 }
 
 .container {
@@ -30,21 +45,76 @@
 }
 
 .card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-img-top {
+    height: 350px;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.card-img-top:hover {
+    transform: scale(1.05);
+}
+
+.card-body {
+    padding: 1rem;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem;
+}
+
+.btn-shop {
+    background-color: var(--color-secondary);
+    border: none;
+    border-radius: 25px;
+    padding: 0.5rem 1.5rem;
+    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.btn-shop:hover {
+    background-color: var(--color-accent);
+    transform: scale(1.05);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 /* Hero Section */
 
 .banner-container {
     position: relative;
-    height: 400px;
+    height: 60vh;
     padding: 4rem 0;
-    background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66');
+    background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
     background-size: cover;
     background-position: center;
     overflow: hidden;
     margin-bottom: 2rem;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: #ffffff;
     text-align: center;
 }
@@ -60,49 +130,66 @@
 }
 
 .banner-content {
-    position: absolute;
-    top: 50%;
-    left: 50px;
-    transform: translateY(50%);
-    color: white;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 1;
     max-width: 800px;
-    margin: 0 auto;
+    padding: 0 1rem;
 }
 
 .banner-title {
-    position: relative;
-    font-size: 3rem;
+    font-size: 3.5rem;
     margin-bottom: 1rem;
-    color: white(255, 255, 255);
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-    font-weight: bold;
+    font-weight: 700;
+    line-height: 1.2;
+    text-shadow: 2px 2px 8px rgba(54, 149, 204, 0.7);
 }
 
 .banner-subtitle {
-    position: relative;
-    font-size: 1.5rem;
+    color: var(--color-neutral) !important;
+    font-size: 1.75rem;
     margin-bottom: 2rem;
-    color: white;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    font-weight: 400;
+    line-height: 1.5;
+    text-shadow: 1px 1px 6px rgba(54, 149, 204, 0.7);
 }
 
 .banner-button {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    background-color: #ff9900;
-    width: 120px;
+    padding: 0.75rem 2rem;
+    font-size: 1.1rem;
+    background-color: var(--color-accent);
+    display: inline-flex;
+    width: auto;
     border: none;
-    border-radius: 25px;
+    border-radius: 30px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s;
-    color: #ffffff;
+    color: var(--color-neutral);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .banner-button:hover {
     background-color: #e68a00;
     transform: scale(1.05);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+    .banner-container {
+        height: 50vh;
+    }
+
+    .banner-title {
+        font-size: 2.5rem;
+    }
+
+    .banner-subtitle {
+        font-size: 1.2rem;
+    }
+
+    .banner-button {
+        padding: 0.5rem 1.5rem;
+        font-size: 1rem;
+    }
 }
 
 /* Category Section */
@@ -114,11 +201,13 @@
     padding: 2rem 0;
 }
 
+/* Sección de Categorías Mejorada */
+
 .category-card {
     background-color: #ffffff;
-    color: #333333;
-    border-radius: 12px;
-    padding: 2rem 1rem;
+    color: var(--color-text-primary);
+    border-radius: 15px;
+    padding: 2rem 1.5rem;
     text-align: center;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -132,28 +221,28 @@
 .category-card:hover {
     transform: translateY(-10px) scale(1.05);
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
-    background-color: #f0f8ff;
+    background-color: #f8f9fa;
 }
 
 .icon-wrapper {
-    font-size: 3rem;
-    margin-bottom: 0.5rem;
-    color: #4682B4;
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    color: var(--color-secondary);
     transition: color 0.3s;
 }
 
 .category-card:hover .icon-wrapper {
-    color: #ff9900;
+    color: var(--color-accent);
 }
 
 .category-name {
-    font-size: 1.2rem;
-    font-weight: bold;
+    font-size: 1.3rem;
+    font-weight: 600;
     transition: color 0.3s;
 }
 
 .category-card:hover .category-name {
-    color: #333333;
+    color: var(--color-secondary);
 }
 
 @media (max-width: 768px) {
@@ -289,19 +378,14 @@
 /* Animations */
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
     to {
         opacity: 1;
-        transform: translateY(0);
     }
 }
 
 .fade-in {
-    animation: fadeIn 0.5s ease-out;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
 }
 
 @keyframes slideIn {
@@ -348,21 +432,6 @@ a:hover {
     color: var(--color-text-secondary);
 }
 
-.card-img-top {
-    height: 300px;
-    object-fit: cover;
-}
-
-.card-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-}
-
-.card-text {
-    font-size: 1rem;
-    color: var(--color-text-secondary)
-}
-
 button {
     border-radius: 50%;
     width: 40px;
@@ -398,4 +467,43 @@ button {
 .btn-outline-secondary:hover {
     background-color: var(--color-secondary);
     color: var(--color-neutral);
+}
+
+@media (max-width: 576px) {
+    .banner-title {
+        font-size: 2rem;
+    }
+
+    .banner-subtitle {
+        font-size: 1rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .card-img-top {
+        height: 250px;
+    }
+
+    .category-card {
+        padding: 1.5rem 1rem;
+    }
+
+    .category-name {
+        font-size: 1.1rem;
+    }
+
+    .btn-shop {
+        width: 100%;
+    }
+}
+
+/* Spinner Centralizado */
+
+.loading-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
 }

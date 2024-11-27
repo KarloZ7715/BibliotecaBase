@@ -41,6 +41,7 @@ class Libro(Base):
     categoria = relationship("Categoria", back_populates="libros")
     valoraciones = relationship("Valoracion", back_populates="libro")
     carrito = relationship("Carrito", back_populates="libro")
+    detallepedido = relationship("DetallePedido", back_populates="libro")
 
 
 class Usuario(Base):
@@ -86,6 +87,9 @@ class Pedido(Base):
     fecha_pedido = Column(DateTime, default=datetime.now(timezone.utc))
     estado = Column(String(50), default="Pendiente")
     usuario = relationship("Usuario", back_populates="pedidos")
+    detallepedido = relationship(
+        "DetallePedido", back_populates="pedido", cascade="all, delete-orphan"
+    )
 
 
 class Valoracion(Base):
@@ -122,3 +126,14 @@ class Registro(Base):
     fecha = Column(DateTime, default=datetime.now(timezone.utc))
     hora = Column(Time, nullable=True)
     usuario = relationship("Usuario", back_populates="registro")
+
+
+class DetallePedido(Base):
+    __tablename__ = "detallepedido"
+    id_detallepedido = Column(Integer, primary_key=True, index=True)
+    id_pedido = Column(Integer, ForeignKey("pedidos.id_pedido"), nullable=False)
+    id_libro = Column(Integer, ForeignKey("libros.id_libro"), nullable=False)
+    cantidad = Column(Integer, default=1, nullable=False)
+    precio_unitario = Column(DECIMAL(10, 2), nullable=False)
+    pedido = relationship("Pedido", back_populates="detallepedido")
+    libro = relationship("Libro", back_populates="detallepedido")

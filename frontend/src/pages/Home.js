@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container, Row, Col } from 'react-bootstrap';
-import { FaFacebookF, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { Button, Container, Row, Col, Card, Spinner, Alert, Image } from 'react-bootstrap';
 import { fetchRandomBooks } from '../api';
 import BookCarousel from '../components/BookCarousel';
 import HeroBanner from '../components/HeroBanner';
 import Categories from '../components/Categories';
+import Footer from '../components/Footer';
 import '../styles/Home.css';
-
+import { useNavigate } from 'react-router-dom';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 function Home() {
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetchRandomBooks(5) // Se obtienen 5 libros aleatorios
+        fetchRandomBooks(5)
             .then(data => {
                 setBooks(data);
                 setLoading(false);
@@ -22,6 +25,11 @@ function Home() {
                 console.error('Error al obtener libros aleatorios:', error);
                 setLoading(false);
             });
+
+        AOS.init({
+            duration: 1000,
+            once: true,
+        });
     }, []);
 
     return (
@@ -30,30 +38,38 @@ function Home() {
             <HeroBanner />
 
             {/* Libros Destacados */}
-            <Container className="mt-5">
+            <section className="featured-books-section" data-aos="fade-up">
                 <h2 className="section-title">Libros Destacados</h2>
                 {loading ? (
-                    <p>Cargando libros destacados...</p>
+                    <div className="loading-spinner">
+                        <Spinner animation="border" role="status">
+                            <span className="visually-hidden">Cargando...</span>
+                        </Spinner>
+                    </div>
                 ) : (
                     <Row>
                         {books.map(book => (
-                            <Col key={book.id_libro} md={4} sm={6} className="mb-4">
-                                <div className="card h-100">
-                                    <img
-                                        src={book.imagen_url || '/assets/images/placeholder.jpg'}
-                                        alt={book.titulo}
-                                        className="card-img-top"
-                                    />
-                                    <div className="card-body">
-                                        <h5 className="card-title">{book.titulo}</h5>
-                                        <p className="card-text">{book.descripcion || 'No hay descripción disponible.'}</p>
-                                    </div>
-                                </div>
+                            <Col key={book.id_libro} md={4} sm={6} className="mb-4" data-aos="zoom-in">
+                                <Card className="fade-in">
+                                    <Card.Img variant="top" src={book.imagen_url || '/assets/images/placeholder.jpg'} className="card-img-top" />
+                                    <Card.Body>
+                                        <Card.Title className="card-title">{book.titulo}</Card.Title>
+                                        <Card.Text className="card-text">
+                                            Autor: {book.autor ? book.autor.nombre : 'Autor Desconocido'}
+                                        </Card.Text>
+                                        <Card.Text className="card-text">
+                                            Precio: ${book.precio.toFixed(2)}
+                                        </Card.Text>
+                                        <Button variant="success" className="btn-shop" onClick={() => navigate(`/libros/${book.id_libro}`)}>
+                                            Comprar Ahora
+                                        </Button>
+                                    </Card.Body>
+                                </Card>
                             </Col>
                         ))}
                     </Row>
                 )}
-            </Container>
+            </section>
 
             {/* Nuevas Llegadas */}
             <Container className="mt-5">
@@ -93,55 +109,9 @@ function Home() {
             <Categories />
 
             {/* Footer */}
-            <footer className="footer-section">
-                <Container>
-                    <Row>
-                        <Col md={3} sm={6}>
-                            <h5>Conócenos</h5>
-                            <ul>
-                                <li><a href="#">Sobre Nosotros</a></li>
-                                <li><a href="#">Historia</a></li>
-                                <li><a href="#">Nuestro Equipo</a></li>
-                                <li><a href="#">Carreras</a></li>
-                            </ul>
-                        </Col>
-                        <Col md={3} sm={6}>
-                            <h5>Servicio al Consumidor</h5>
-                            <ul>
-                                <li><a href="#">Contacto</a></li>
-                                <li><a href="#">FAQ</a></li>
-                                <li><a href="#">Envíos</a></li>
-                                <li><a href="#">Devoluciones</a></li>
-                            </ul>
-                        </Col>
-                        <Col md={3} sm={6}>
-                            <h5>Redes Sociales</h5>
-                            <ul>
-                                <li><a href="#"><FaFacebookF /> Facebook</a></li>
-                                <li><a href="#"><FaTwitter /> Twitter</a></li>
-                                <li><a href="#"><FaInstagram /> Instagram</a></li>
-                            </ul>
-                        </Col>
-                        <Col md={3} sm={6}>
-                            <h5>Mi Cuenta</h5>
-                            <ul>
-                                <li><a href="/login">Iniciar Sesión</a></li>
-                                <li><a href="/register">Registrarse</a></li>
-                                <li><a href="/carrito">Carrito</a></li>
-                            </ul>
-                        </Col>
-                    </Row>
-                    <hr />
-                    <Row>
-                        <Col className="text-center">
-                            <p>&copy; {new Date().getFullYear()} Biblioteca Virtual. Todos los derechos reservados.</p>
-                        </Col>
-                    </Row>
-                </Container>
-            </footer>
+            <Footer />
         </div>
     );
 }
 
 export default Home;
-

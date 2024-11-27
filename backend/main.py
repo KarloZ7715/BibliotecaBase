@@ -14,6 +14,7 @@ from routes import (
     valoraciones,
     tarjetas,
     registros,
+    detallepedido,
 )
 
 models.Base.metadata.create_all(bind=engine)
@@ -40,3 +41,4 @@ app.include_router(valoraciones.router)
 app.include_router(tarjetas.router)
 app.include_router(registros.router)
 app.include_router(autenticacion.router)
+app.include_router(detallepedido.router)

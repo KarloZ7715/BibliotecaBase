@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchBooks } from "../api";
 import { Link } from "react-router-dom";
+import Footer from "../components/Footer";
 
 function BookList() {
     const [books, setBooks] = useState([]);
@@ -21,6 +22,7 @@ function BookList() {
                     </li>
                 ))}
             </ul>
+            <Footer />
         </div>
     );
 }

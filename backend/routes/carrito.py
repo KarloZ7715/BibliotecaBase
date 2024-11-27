@@ -1,10 +1,11 @@
+from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-import models
-import schemas
-from database import get_db
-from dependencies import get_current_user
 from typing import List
+from database import get_db
+from models import Carrito, Libro
+from schemas import Carrito as CarritoSchema
+from dependencies import get_current_user
 
 
 router = APIRouter(
@@ -13,63 +14,101 @@ router = APIRouter(
 )
 
 
-@router.post("/", response_model=schemas.Carrito)
+@router.get("/", response_model=List[CarritoSchema])
+def obtener_carrito_actual(
+    db: Session = Depends(get_db),
+    current_user: int = Depends(get_current_user),
+):
+    carrito_items = (
+        db.query(Carrito).filter(Carrito.id_usuario == current_user.id_usuario).all()
+    )
+    return carrito_items
+
+
+@router.post("/agregar", response_model=CarritoSchema)
 def agregar_al_carrito(
-    item: schemas.CarritoCreate,
+    id_libro: int,
     db: Session = Depends(get_db),
-    usuario: models.Usuario = Depends(get_current_user),
+    current_user: int = Depends(get_current_user),
 ):
-    db_item = (
-        db.query(models.Carrito)
+    carrito_item = (
+        db.query(Carrito)
         .filter(
-            models.Carrito.id_usuario == usuario.id_usuario,
-            models.Carrito.id_libro == item.id_libro,
+            Carrito.id_usuario == current_user.id_usuario, Carrito.id_libro == id_libro
         )
         .first()
     )
-    if db_item:
-        db_item.cantidad += item.cantidad
+    if carrito_item:
+        carrito_item.cantidad += 1
+        carrito_item.fecha_agregado = datetime.now()
     else:
-        db_item = models.Carrito(
-            id_usuario=usuario.id_usuario,
-            id_libro=item.id_libro,
-            cantidad=item.cantidad,
+        nuevo_item = Carrito(
+            id_usuario=current_user.id_usuario,
+            id_libro=id_libro,
+            cantidad=1,
+            fecha_agregado=datetime.now(),
         )
-        db.add(db_item)
+        db.add(nuevo_item)
     db.commit()
-    db.refresh(db_item)
-    return db_item
+    db.refresh(carrito_item if carrito_item else nuevo_item)
+    return carrito_item if carrito_item else nuevo_item
 
 
-@router.get("/", response_model=List[schemas.Carrito])
-def obtener_carrito(
+@router.put("/actualizar", response_model=CarritoSchema)
+def actualizar_cantidad_carrito(
+    id_libro: int,
+    cantidad: int,
     db: Session = Depends(get_db),
-    usuario: models.Usuario = Depends(get_current_user),
+    current_user: int = Depends(get_current_user),
 ):
-    carrito = (
-        db.query(models.Carrito)
-        .filter(models.Carrito.id_usuario == usuario.id_usuario)
-        .all()
-    )
-    return carrito
+    if cantidad < 0:
+        raise HTTPException(status_code=400, detail="La cantidad no puede ser negativa")
 
-
-@router.delete("{id_carrito}", response_model=schemas.Carrito)
-def eliminar_del_carrito(
-    id_carrito: int,
-    db: Session = Depends(get_db),
-    usuario: models.Usuario = Depends(get_current_user),
-):
-    db_item = (
-        db.query(models.Carrito)
+    carrito_item = (
+        db.query(Carrito)
         .filter(
-            models.Carrito.id_carrito == id_carrito,
-            models.Carrito.id_usuario == usuario.id_usuario,
+            Carrito.id_usuario == current_user.id_usuario, Carrito.id_libro == id_libro
         )
         .first()
     )
-    if db_item is None:
-        raise HTTPException(status_code=404, detail="Item no encontrado en el carrito")
-    db.delete(db_item)
+    if not carrito_item:
+        raise HTTPException(status_code=404, detail="El ítem no está en el carrito")
+
+    if cantidad == 0:
+        db.delete(carrito_item)
+    else:
+        carrito_item.cantidad = cantidad
+        carrito_item.fecha_agregado = datetime.now()
+
     db.commit()
-    return db_item
+    return carrito_item
+
+
+@router.delete("/eliminar", response_model=dict)
+def eliminar_del_carrito(
+    id_libro: int,
+    db: Session = Depends(get_db),
+    current_user: int = Depends(get_current_user),
+):
+    carrito_item = (
+        db.query(Carrito)
+        .filter(
+            Carrito.id_usuario == current_user.id_usuario, Carrito.id_libro == id_libro
+        )
+        .first()
+    )
+    if not carrito_item:
+        raise HTTPException(status_code=404, detail="El ítem no está en el carrito")
+
+    db.delete(carrito_item)
+    db.commit()
+    return {"detail": "Ítem eliminado del carrito"}
+
+
+@router.delete("/vaciar", response_model=dict)
+def vaciar_carrito(
+    db: Session = Depends(get_db), current_user: int = Depends(get_current_user)
+):
+    db.query(Carrito).filter(Carrito.id_usuario == current_user.id_usuario).delete()
+    db.commit()
+    return {"detail": "Carrito vaciado"}

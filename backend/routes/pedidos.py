@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
-import models
-import schemas
+import models, schemas
 from dependencies import get_db, get_current_user
+from sqlalchemy.exc import SQLAlchemyError
 
 router = APIRouter(
     prefix="/pedidos",
@@ -12,22 +12,30 @@ router = APIRouter(
 
 
 @router.post("/", response_model=schemas.Pedido)
-def crear_pedido(
-    pedido: schemas.PedidoCreate,
-    db: Session = Depends(get_db),
-    usuario: models.Usuario = Depends(get_current_user),
-):
-    if usuario.rol != "cliente":
-        raise HTTPException(
-            status_code=403, detail="Solo los clientes pueden realizar pedidos"
+def crear_pedido(pedido: schemas.PedidoCreate, db: Session = Depends(get_db)):
+    try:
+        db_pedido = models.Pedido(
+            id_usuario=pedido.id_usuario, total=pedido.total, estado=pedido.estado
         )
-    db_pedido = models.Pedido(
-        id_usuario=usuario.id_usuario, total=pedido.total, estado=pedido.estado
-    )
-    db.add(db_pedido)
-    db.commit()
-    db.refresh(db_pedido)
-    return db_pedido
+        db.add(db_pedido)
+        db.commit()
+        db.refresh(db_pedido)
+
+        for detalle in pedido.detallepedido:
+            db_detalle = models.DetallePedido(
+                id_pedido=db_pedido.id_pedido,
+                id_libro=detalle.id_libro,
+                cantidad=detalle.cantidad,
+                precio_unitario=detalle.precio_unitario,
+            )
+            db.add(db_detalle)
+
+        db.commit()
+        db.refresh(db_pedido)
+        return db_pedido
+    except SQLAlchemyError as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Error al crear el pedido")
 
 
 @router.get("/", response_model=List[schemas.Pedido])
@@ -50,21 +58,13 @@ def obtener_pedidos(
     return pedidos
 
 
-@router.get("/{id_pedido}", response_model=schemas.Pedido)
-def obtener_pedido(
-    id_pedido: int,
-    db: Session = Depends(get_db),
-    usuario: models.Usuario = Depends(get_current_user),
-):
+@router.get("/{pedido_id}", response_model=schemas.Pedido)
+def leer_pedido(pedido_id: int, db: Session = Depends(get_db)):
     pedido = (
-        db.query(models.Pedido).filter(models.Pedido.id_pedido == id_pedido).first()
+        db.query(models.Pedido).filter(models.Pedido.id_pedido == pedido_id).first()
     )
     if not pedido:
         raise HTTPException(status_code=404, detail="Pedido no encontrado")
-    if usuario.rol != "admin" and pedido.id_usuario != usuario.id_usuario:
-        raise HTTPException(
-            status_code=403, detail="No tienes permiso para ver este pedido"
-        )
     return pedido
 
 

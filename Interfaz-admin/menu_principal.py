@@ -1335,7 +1335,7 @@ class AdminPanel:
             row=5, column=0, pady=10, padx=10, sticky="w"
         )
         estado = ttk.Combobox(window, font=("Arial", 10), width=27, state="readonly")
-        estado["values"] = ["Pendiente", "En proceso", "Completado"]
+        estado["values"] = ["Cancelado", "En proceso", "Completado"]
         estado.grid(row=5, column=1, pady=10, padx=10)
 
         def cargar_pedidos():

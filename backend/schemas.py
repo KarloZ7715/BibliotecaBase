@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional, List
+from decimal import Decimal
 from datetime import date, datetime
 
 
@@ -93,24 +94,46 @@ class Carrito(CarritoBase):
     id_carrito: int
     id_usuario: int
     fecha_agregado: datetime
+    libro: Optional[Libro] = None
+
+    class Config:
+        orm_mode = True
+
+
+class DetallePedidoBase(BaseModel):
+    id_pedido: int
+    id_libro: int
+    cantidad: int = 1
+    precio_unitario: Decimal
+
+
+class DetallePedidoCreate(BaseModel):
+    id_libro: int
+    cantidad: int
+    precio_unitario: Decimal
+
+
+class DetallePedido(DetallePedidoBase):
+    id_detallepedido: int
 
     class Config:
         orm_mode = True
 
 
 class PedidoBase(BaseModel):
-    total: float
-    estado: Optional[str] = "Pendiente"
+    id_usuario: int
+    total: Decimal
+    estado: Optional[str] = "En proceso"
 
 
 class PedidoCreate(PedidoBase):
-    pass
+    detallepedido: List[DetallePedidoCreate]
 
 
 class Pedido(PedidoBase):
     id_pedido: int
-    id_usuario: int
     fecha_pedido: datetime
+    detallepedido: List[DetallePedido] = []
 
     class Config:
         orm_mode = True
@@ -129,6 +152,7 @@ class Valoracion(ValoracionBase):
     id_valoracion: int
     id_usuario: int
     fecha_valoracion: datetime
+    usuario: Usuario
 
     class Config:
         orm_mode = True

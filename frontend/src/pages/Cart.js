@@ -1,16 +1,16 @@
 import React, { useContext } from 'react';
 import { Container, Row, Col, Image, Button, Alert } from 'react-bootstrap';
 import { CartContext } from '../contexts/CartContext';
-import { FaTrash, FaPlus } from 'react-icons/fa';
+import { FaTrash, FaPlus, FaMinus } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Cart.css';
 
 function Cart() {
-    const { cartItems, removeFromCart, incrementQuantity } = useContext(CartContext);
+    const { cartItems, removeFromCart, incrementQuantity, decrementQuantity } = useContext(CartContext);
     const navigate = useNavigate();
 
-    const subtotal = cartItems.reduce((acc, item) => acc + item.precio * item.quantity, 0);
-    const totalProducts = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+    const subtotal = cartItems.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
+    const totalProducts = cartItems.reduce((acc, item) => acc + item.cantidad, 0);
 
     if (cartItems.length === 0) {
         return (
@@ -52,15 +52,22 @@ function Cart() {
                         <Button
                             variant="danger"
                             onClick={() => removeFromCart(item.id_libro)}
-                            className="me-2"
+                            className="trash-btn me-2"
                         >
                             <FaTrash />
                         </Button>
-                        <span>{item.quantity}</span>
+                        <Button
+                            variant="secondary"
+                            onClick={() => decrementQuantity(item.id_libro)}
+                            className="minus-btn me-2"
+                        >
+                            <FaMinus />
+                        </Button>
+                        <span>{item.cantidad}</span>
                         <Button
                             variant="success"
                             onClick={() => incrementQuantity(item.id_libro)}
-                            className="ms-2"
+                            className="plus-btn ms-2"
                         >
                             <FaPlus />
                         </Button>

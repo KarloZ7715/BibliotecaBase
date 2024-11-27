@@ -12,7 +12,7 @@ function SearchBar() {
     const [query, setQuery] = useState('');
     const navigate = useNavigate();
     const { cartItems } = useContext(CartContext);
-    const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    const totalItems = cartItems.reduce((sum, item) => sum + item.cantidad, 0);
     const { isAuthenticated } = useContext(AuthContext);
     const handleSubmit = (e) => {
         e.preventDefault();

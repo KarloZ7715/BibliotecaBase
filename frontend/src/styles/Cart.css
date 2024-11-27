@@ -18,6 +18,24 @@
     max-height: 150px;
 }
 
+.trash-btn {
+    width: auto;
+    height: auto;
+}
+
+.minus-btn {
+    width: auto;
+    height: auto;
+
+}
+
+.plus-btn {
+    width: auto;
+    height: auto;
+}
+
+
+
 .cart-item .btn {
     display: flex;
     align-items: center;
