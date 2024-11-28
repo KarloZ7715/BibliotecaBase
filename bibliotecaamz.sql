@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-11-2024 a las 23:14:33
+-- Tiempo de generación: 28-11-2024 a las 18:45:54
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -53,7 +53,9 @@ INSERT INTO `autores` (`id_autor`, `nombre`, `biografia`, `fecha_nacimiento`) VA
 (1, 'Langston Hughes', 'Langston Hughes alcanzó fama como poeta durante el florecimiento de las artes conocido como el Renacimiento de Harlem, pero quienes lo etiquetan como \"un poeta del Renacimiento de Harlem\" han restringido su fama a un solo género y década.', '1902-02-01'),
 (2, 'Dan Brown', 'Dan Brown es un autor estadounidense de ficción de suspenso, mejor conocido por la novela más vendida de 2003, El Código Da Vinci. Las novelas de Brown, que son búsquedas del tesoro ambientadas en un período de 24 horas, presentan temas recurrentes de criptografía, claves, símbolos, códigos y teorías de conspiración.', '1964-06-22'),
 (3, 'Tui T. Sutherland', 'Tui T. Sutherland nació el 31 de julio de 1978 en Caracas, Venezuela. Su madre, que es de Nueva Zelanda, le puso el nombre del tui, un ave originaria de ese país. Sutherland vivió en Asunción, Paraguay; Miami, Florida; y Santo Domingo, República Dominicana; antes de mudarse a Nueva Jersey en la escuela secundaria. Mientras estaba en la escuela secundaria comenzó a hacer teatro,\nque consistió principalmente en trabajo detrás del escenario.', '1978-07-31'),
-(4, 'James Fenimore Cooper', 'James Fenimore Cooper fue un prolífico y popular escritor estadounidense de principios del siglo XIX. Se le recuerda mejor como un novelista que escribió numerosas historias marinas y novelas históricas conocidas como Leatherstocking Tales, protagonizadas por el hombre de la frontera Natty Bumppo.', '1789-09-15');
+(4, 'James Fenimore Cooper', 'James Fenimore Cooper fue un prolífico y popular escritor estadounidense de principios del siglo XIX. Se le recuerda mejor como un novelista que escribió numerosas historias marinas y novelas históricas conocidas como Leatherstocking Tales, protagonizadas por el hombre de la frontera Natty Bumppo.', '1789-09-15'),
+(5, 'Robert Greene', 'Robert Greene (nacido el 14 de mayo de 1959) es un autor estadounidense conocido por sus libros sobre estrategia, poder y seducción. Ha escrito seis bestsellers internacionales: Las 48 leyes del poder, El arte de la seducción, Las 33 estrategias de la guerra, La ley 50 (con el rapero 50 Cent), Maestría y Las leyes de la naturaleza humana.', '1959-04-14'),
+(6, 'Morgan Housel', '', '1999-10-01');
 
 -- --------------------------------------------------------
 
@@ -68,6 +70,13 @@ CREATE TABLE `carrito` (
   `cantidad` int(11) DEFAULT 1,
   `fecha_agregado` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `carrito`
+--
+
+INSERT INTO `carrito` (`id_carrito`, `id_usuario`, `id_libro`, `cantidad`, `fecha_agregado`) VALUES
+(18, 1, 10, 1, '2024-11-26 23:29:19');
 
 -- --------------------------------------------------------
 
@@ -87,9 +96,39 @@ CREATE TABLE `categorias` (
 INSERT INTO `categorias` (`id_categoria`, `nombre_categoria`) VALUES
 (1, 'Acción'),
 (4, 'Ciencia'),
+(11, 'Economía'),
+(9, 'Educativo'),
 (2, 'Ficción'),
+(10, 'Filosofía'),
+(6, 'Historia'),
+(8, 'Política'),
+(7, 'Psicología'),
 (5, 'Tecnología'),
 (3, 'Thriller');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `detallepedido`
+--
+
+CREATE TABLE `detallepedido` (
+  `id_detallepedido` int(11) NOT NULL,
+  `id_pedido` int(11) NOT NULL,
+  `id_libro` int(11) NOT NULL,
+  `cantidad` int(11) NOT NULL DEFAULT 1,
+  `precio_unitario` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `detallepedido`
+--
+
+INSERT INTO `detallepedido` (`id_detallepedido`, `id_pedido`, `id_libro`, `cantidad`, `precio_unitario`) VALUES
+(1, 4, 10, 1, 80000.00),
+(3, 6, 4, 2, 28000.00),
+(4, 7, 3, 1, 45000.00),
+(5, 11, 1, 1, 55000.00);
 
 -- --------------------------------------------------------
 
@@ -118,7 +157,9 @@ INSERT INTO `libros` (`id_libro`, `titulo`, `descripcion`, `precio`, `stock`, `i
 (1, 'Not without laughter', 'Esta es la historia de la mayoría de edad de un niño afroamericano en un pequeño pueblo de Kansas.', 55000.00, 5, 1, 2, 'https://ia800505.us.archive.org/view_archive.php?archive=/10/items/m_covers_0011/m_covers_0011_68.zip&file=0011688085-M.jpg', '1963-01-15', '00000000'),
 (2, 'DIGITAL FORTRESS', 'Digital Fortress es una novela de suspenso escrita por el autor estadounidense Dan Brown y publicada en 1998 por St. Martin\'s Press. El libro explora el tema de la vigilancia gubernamental de la información almacenada electrónicamente sobre la vida privada de los ciudadanos, y las posibles libertades civiles y las implicaciones éticas del uso de dicha tecnología.', 35000.00, 7, 2, 3, 'https://covers.openlibrary.org/b/id/14542864-M.jpg', '2005-06-12', '9780593057445'),
 (3, 'The Dark Secret', 'Como todos los dragoncitos del destino, Starflight siempre ha querido ver su hogar, pero también ha tenido miedo de sus compañeros NightWings. Starflight no tiene poderes para leer la mente como su tribu y no entiende por qué son tan reservados. Nadie ha visto nunca a la reina NightWing.', 45000.00, 3, 3, 2, 'https://covers.openlibrary.org/b/id/7436616-M.jpg', '2013-03-13', '545349214'),
-(4, 'L\'ultimo dei Mohicani', 'La historia clásica de Hawkeye, Natty Bumppo, el explorador fronterizo que le dio la espalda a la \"civilización\" y su amistad con un guerrero mohicano mientras escoltan a dos hermanas a través del peligroso desierto del país indio en la frontera de Estados Unidos.', 28000.00, 8, 4, 2, 'https://covers.openlibrary.org/b/id/12139938-M.jpg', '1994-09-02', '8879836854');
+(4, 'L\'ultimo dei Mohicani', 'La historia clásica de Hawkeye, Natty Bumppo, el explorador fronterizo que le dio la espalda a la \"civilización\" y su amistad con un guerrero mohicano mientras escoltan a dos hermanas a través del peligroso desierto del país indio en la frontera de Estados Unidos.', 28000.00, 8, 4, 2, 'https://covers.openlibrary.org/b/id/12139938-M.jpg', '1994-09-02', '8879836854'),
+(9, 'The 48 laws of power', 'Amoral, astuto, despiadado e instructivo, este bestseller del New York Times, con millones de copias, es el manual definitivo para cualquier persona interesada en obtener, observar o defenderse del control definitivo, del autor de Las leyes de la naturaleza humana.', 65000.00, 15, 5, 10, 'https://covers.openlibrary.org/b/id/9573841-M.jpg', '1998-09-13', '25418275'),
+(10, 'La psicología del dinero', 'Lecciones eternas sobre la riqueza, la codicia y la felicidad. Hacer bien el dinero no tiene que ver necesariamente con lo que sabes. Se trata de cómo te comportas. Y el comportamiento es difícil de enseñar, incluso a personas realmente inteligentes. Por lo general, se considera que cómo administrar el dinero, invertirlo y tomar decisiones comerciales implica muchos cálculos matemáticos.\ndonde los datos y las fórmulas nos dicen exactamente qué hacer. Pero en el mundo real, la gente no toma decisiones financieras en una hoja de cálculo. Los preparan en la mesa o en una sala de reuniones, donde se mezclan la historia personal, su visión única del mundo, el ego, el orgullo, el marketing y los incentivos extraños.', 80000.00, 5, 6, 11, 'https://covers.openlibrary.org/b/id/14653525-M.jpg', '2020-09-08', '0857197681');
 
 -- --------------------------------------------------------
 
@@ -131,7 +172,7 @@ CREATE TABLE `pedidos` (
   `id_usuario` int(11) DEFAULT NULL,
   `total` decimal(10,2) NOT NULL,
   `fecha_pedido` datetime DEFAULT current_timestamp(),
-  `estado` varchar(50) DEFAULT 'Pendiente'
+  `estado` varchar(50) DEFAULT 'En proceso'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -139,7 +180,13 @@ CREATE TABLE `pedidos` (
 --
 
 INSERT INTO `pedidos` (`id_pedido`, `id_usuario`, `total`, `fecha_pedido`, `estado`) VALUES
-(1, 1, 55000.00, '2024-11-21 00:00:00', 'Completado');
+(4, 6, 80000.00, '2024-11-27 07:57:42', 'Completado'),
+(6, 6, 56000.00, '2024-11-27 07:59:48', 'Completado'),
+(7, 6, 45000.00, '2024-11-27 08:17:37', 'Completado'),
+(8, 6, 55000.00, '2024-11-27 08:55:57', 'En proceso'),
+(9, 6, 55000.00, '2024-11-27 08:55:57', 'En proceso'),
+(10, 6, 55000.00, '2024-11-27 08:55:57', 'En proceso'),
+(11, 6, 55000.00, '2024-11-27 10:06:41', 'En proceso');
 
 -- --------------------------------------------------------
 
@@ -191,7 +238,23 @@ INSERT INTO `registros` (`id_registro`, `id_usuario`, `accion`, `detalles`, `fec
 (28, 1, 'Actualización', 'Libro Not without laughter actualizado correctamente', '2024-11-23 00:00:00', '15:47:20'),
 (29, 1, 'Actualización', 'Libro L\'ultimo dei Mohicani actualizado correctamente', '2024-11-23 00:00:00', '15:47:58'),
 (30, 1, 'Actualización', 'Libro L\'ultimo dei Mohicani actualizado correctamente', '2024-11-23 00:00:00', '15:48:08'),
-(31, 1, 'Actualización', 'Autor Tui T. Sutherland actualizado', '2024-11-23 00:00:00', '16:22:28');
+(31, 1, 'Actualización', 'Autor Tui T. Sutherland actualizado', '2024-11-23 00:00:00', '16:22:28'),
+(32, 1, 'Inserción', 'Categoría Historia agregada correctamente', '2024-11-24 00:00:00', '02:01:29'),
+(33, 1, 'Inserción', 'Categoría Psicología agregada correctamente', '2024-11-24 00:00:00', '02:01:53'),
+(34, 1, 'Inserción', 'Categoría Política agregada correctamente', '2024-11-24 00:00:00', '02:02:14'),
+(35, 1, 'Inserción', 'Categoría Educativo agregada correctamente', '2024-11-24 00:00:00', '02:02:36'),
+(36, 1, 'Inserción', 'Categoría Filosofía agregada correctamente', '2024-11-24 00:00:00', '02:03:15'),
+(37, 1, 'Inserción', 'Autor Robert Greene agregado correctamente', '2024-11-24 00:00:00', '02:04:07'),
+(38, 1, 'Eliminación', 'Libro [8, \'The 48 laws of power\', \'Amoral, astuto, despiadado e instructivo, este bestseller del New York Times, con millones de ejemplares, es el manual definitivo para cualquier persona interesada en obtener, observar o defenderse contra el control definitivo, del autor de Las leyes de la naturaleza humana.\', \'Robert Greene\', \'Filosofía\', \'65000.00\', 15, \'https://covers.openlibrary.org/b/id/9573841-M.jpg\', \'1998-09-13\', 25418275] eliminado correctamente', '2024-11-24 00:00:00', '02:16:26'),
+(39, 1, 'Eliminación', 'Libro [7, \'The 48 laws of power\', \'Amoral, astuto, despiadado e instructivo, este bestseller del New York Times, con millones de ejemplares, es el manual definitivo para cualquier persona interesada en obtener, observar o defenderse contra el control definitivo, del autor de Las leyes de la naturaleza humana.\', \'Robert Greene\', \'Filosofía\', \'65000.00\', 15, \'https://covers.openlibrary.org/b/id/9573841-M.jpg\', \'1998-09-13\', 25418275] eliminado correctamente', '2024-11-24 00:00:00', '02:16:30'),
+(40, 1, 'Eliminación', 'Libro [6, \'The 48 laws of power\', \'Amoral, astuto, despiadado e instructivo, este bestseller del New York Times, con millones de ejemplares, es el manual definitivo para cualquier persona interesada en obtener, observar o defenderse contra el control definitivo, del autor de Las leyes de la naturaleza humana.\', \'Robert Greene\', \'Filosofía\', \'65000.00\', 15, \'https://covers.openlibrary.org/b/id/9573841-M.jpg\', \'1998-09-13\', 25418275] eliminado correctamente', '2024-11-24 00:00:00', '02:16:32'),
+(41, 1, 'Eliminación', 'Libro [5, \'The 48 laws of power\', \'Amoral, astuto, despiadado e instructivo, este bestseller del New York Times, con millones de ejemplares, es el manual definitivo para cualquier persona interesada en obtener, observar o defenderse contra el control definitivo, del autor de Las leyes de la naturaleza humana.\', \'Robert Greene\', \'Filosofía\', \'65000.00\', 15, \'https://covers.openlibrary.org/b/id/9573841-M.jpg\', \'1998-09-13\', 25418275] eliminado correctamente', '2024-11-24 00:00:00', '02:16:39'),
+(42, 1, 'Inserción', 'Categoría Economía agregada correctamente', '2024-11-24 00:00:00', '02:20:00'),
+(43, 1, 'Inserción', 'Autor Morgan Housel agregado correctamente', '2024-11-24 00:00:00', '02:20:46'),
+(44, 1, 'Actualización', 'Estado del pedido 4 actualizado', '2024-11-27 00:00:00', '03:47:51'),
+(45, 1, 'Actualización', 'Estado del pedido 6 actualizado', '2024-11-27 00:00:00', '03:47:55'),
+(46, 1, 'Actualización', 'Estado del pedido 6 actualizado', '2024-11-27 00:00:00', '03:48:01'),
+(47, 1, 'Actualización', 'Estado del pedido 7 actualizado', '2024-11-27 00:00:00', '03:48:04');
 
 -- --------------------------------------------------------
 
@@ -207,6 +270,15 @@ CREATE TABLE `tarjetas` (
   `tipo` varchar(10) DEFAULT NULL,
   `nombre_titular` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tarjetas`
+--
+
+INSERT INTO `tarjetas` (`id_tarjeta`, `id_usuario`, `numero_tarjeta`, `fecha_expiracion`, `tipo`, `nombre_titular`) VALUES
+(1, 1, '1111111111122222', '2026-08-01', 'Crédito', 'Admin'),
+(2, 1, '52341341', '2033-05-01', 'Débito', 'Admin'),
+(3, 6, '1111111111111111', '2030-11-01', 'Crédito', 'Juan');
 
 -- --------------------------------------------------------
 
@@ -230,8 +302,10 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `rol`, `nombre`, `correo`, `contraseña`, `direccion`, `telefono`, `fecha_registro`) VALUES
-(1, 'admin', 'Admin', 'exp@exp.com', '1234', 'Cl6 #6-667', '555222666', '2024-11-21 00:27:14'),
-(4, 'admin', 'Luis', 'ejemplo@exp.com', '12345', '22 #2-32', '551112223', '2024-11-23 15:43:28');
+(1, 'admin', 'Admin', 'exp@exp.com', '123456', 'Cl6 #6-667', '555222666', '2024-11-21 00:27:14'),
+(4, 'admin', 'Luis', 'ejemplo@exp.com', '123455', '22 #2-32', '551112223', '2024-11-23 15:43:28'),
+(5, 'cliente', 'aaaaa', 'aa@aa.com', '123456', '2222', '2222', '2024-11-26 03:21:19'),
+(6, 'cliente', 'Juan', 'juan@correo.com', '123456', '22#22', '3151456142', '2024-11-26 02:48:20');
 
 -- --------------------------------------------------------
 
@@ -246,6 +320,15 @@ CREATE TABLE `valoraciones` (
   `valoracion` int(11) DEFAULT NULL CHECK (`valoracion` between 1 and 5),
   `fecha_valoracion` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `valoraciones`
+--
+
+INSERT INTO `valoraciones` (`id_valoracion`, `id_libro`, `id_usuario`, `valoracion`, `fecha_valoracion`) VALUES
+(2, 4, 6, 4, '2024-11-27 08:55:57'),
+(3, 10, 6, 5, '2024-11-27 08:55:57'),
+(4, 3, 6, 5, '2024-11-27 08:55:57');
 
 --
 -- Índices para tablas volcadas
@@ -271,6 +354,14 @@ ALTER TABLE `carrito`
 ALTER TABLE `categorias`
   ADD PRIMARY KEY (`id_categoria`),
   ADD UNIQUE KEY `nombre_categoria` (`nombre_categoria`);
+
+--
+-- Indices de la tabla `detallepedido`
+--
+ALTER TABLE `detallepedido`
+  ADD PRIMARY KEY (`id_detallepedido`),
+  ADD KEY `id_pedido` (`id_pedido`),
+  ADD KEY `id_libro` (`id_libro`);
 
 --
 -- Indices de la tabla `libros`
@@ -324,31 +415,37 @@ ALTER TABLE `valoraciones`
 -- AUTO_INCREMENT de la tabla `autores`
 --
 ALTER TABLE `autores`
-  MODIFY `id_autor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_autor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `carrito`
 --
 ALTER TABLE `carrito`
-  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT de la tabla `detallepedido`
+--
+ALTER TABLE `detallepedido`
+  MODIFY `id_detallepedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `libros`
 --
 ALTER TABLE `libros`
-  MODIFY `id_libro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_libro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `registros`
@@ -360,19 +457,19 @@ ALTER TABLE `registros`
 -- AUTO_INCREMENT de la tabla `tarjetas`
 --
 ALTER TABLE `tarjetas`
-  MODIFY `id_tarjeta` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_tarjeta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `valoraciones`
 --
 ALTER TABLE `valoraciones`
-  MODIFY `id_valoracion` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_valoracion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Restricciones para tablas volcadas
@@ -384,6 +481,13 @@ ALTER TABLE `valoraciones`
 ALTER TABLE `carrito`
   ADD CONSTRAINT `carrito_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`),
   ADD CONSTRAINT `carrito_ibfk_2` FOREIGN KEY (`id_libro`) REFERENCES `libros` (`id_libro`);
+
+--
+-- Filtros para la tabla `detallepedido`
+--
+ALTER TABLE `detallepedido`
+  ADD CONSTRAINT `detallepedido_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedidos` (`id_pedido`) ON DELETE CASCADE,
+  ADD CONSTRAINT `detallepedido_ibfk_2` FOREIGN KEY (`id_libro`) REFERENCES `libros` (`id_libro`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `libros`
