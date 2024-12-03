@@ -60,7 +60,7 @@
 }
 
 .card-img-top {
-    height: 350px;
+    height: 200px;
     object-fit: cover;
     transition: transform 0.3s;
 }
@@ -90,9 +90,11 @@
     background-color: var(--color-secondary);
     border: none;
     border-radius: 25px;
-    padding: 0.5rem 1.5rem;
-    font-size: 1rem;
+    padding: 0.75rem 2rem;
+    font-size: 1.1rem;
     transition: background-color 0.3s, transform 0.3s;
+    white-space: nowrap;
+    width: auto;
 }
 
 .btn-shop:hover {
@@ -201,8 +203,6 @@
     padding: 2rem 0;
 }
 
-/* Sección de Categorías Mejorada */
-
 .category-card {
     background-color: #ffffff;
     color: var(--color-text-primary);
@@ -261,44 +261,6 @@
     .category-name {
         font-size: 1rem;
     }
-}
-
-/* New Arrival Section */
-
-.new-arrival-card {
-    text-align: center;
-    margin-bottom: 30px;
-    transition: transform 0.3s, box-shadow 0.3s;
-    height: 150px;
-}
-
-.new-arrival-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.new-arrival-image {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    border-radius: 10px 10px 0 0;
-}
-
-.new-arrival-card h5 {
-    font-size: 1.2rem;
-    margin-top: 10px;
-    color: #333;
-}
-
-.new-arrival-card p {
-    font-size: 1rem;
-    color: #555;
-    margin-bottom: 10px;
-}
-
-.new-arrival-card .btn {
-    font-size: 0.9rem;
-    width: 150px;
 }
 
 /* Navbar */
@@ -506,4 +468,32 @@ button {
     align-items: center;
     justify-content: center;
     height: 200px;
+}
+
+.featured-card {
+    cursor: pointer;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Recommended Books Section */
+.recommended-books-section {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.recommended-card {
+    cursor: pointer;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.recommended-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
 }
