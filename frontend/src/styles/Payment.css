@@ -116,10 +116,10 @@
     align-items: center;
 }
 
-button.btn.btn-success {
-    min-width: 70px;
+button.btn.btn-primary {
+    width: auto;
 }
 
 button.btn.btn-secondary {
-    min-width: 90px;
+    width: auto;
 }
