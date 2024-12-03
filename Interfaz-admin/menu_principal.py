@@ -1554,25 +1554,6 @@ class AdminPanel:
             command=cargar_registros,
         ).pack(side=tk.LEFT, padx=5)
 
-        # tk.Button(
-        #     frame_controls,
-        #     text="Imprimir Tabla",
-        #     bg="orange",
-        #     fg="white",
-        #     command=lambda: imprimir_tabla(tree),
-        # ).pack(side=tk.LEFT, padx=5)
-
-        # def imprimir_tabla(treeview):
-        #     registros = [
-        #         treeview.item(child)["values"] for child in treeview.get_children()
-        #     ]
-
-        #     if registros:
-        #         print("\n".join(map(str, registros)))
-        #         messagebox.showinfo("Imprimir", "Registros impresos correctamente.")
-        #     else:
-        #         messagebox.showwarning("Imprimir", "No hay registros para imprimir.")
-
         cargar_registros()
 
     def filtrar_registros(self):
