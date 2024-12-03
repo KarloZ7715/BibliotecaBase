@@ -362,8 +362,8 @@ class AdminPanel:
                         usuario["nombre"],
                         usuario["correo"],
                         usuario["contraseña"],
-                        usuario["dirección"],
-                        usuario["teléfono"],
+                        usuario["direccion"],
+                        usuario["telefono"],
                         usuario["rol"],
                     ),
                 )
