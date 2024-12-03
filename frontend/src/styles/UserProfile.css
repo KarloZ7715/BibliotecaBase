@@ -35,6 +35,26 @@
     flex-direction: column;
 }
 
+.profile-section .pagination {
+    margin-top: 20px;
+}
+
+.profile-section .pagination .page-item .page-link {
+    color: #3498db;
+}
+
+.profile-section .pagination .page-item.active .page-link {
+    background-color: #3498db;
+    border-color: #3498db;
+    color: #ffffff;
+}
+
+.profile-section .pagination .page-item .page-link:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+    color: #ffffff;
+}
+
 .profile-section:hover {
     transform: translateY(-5px);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);

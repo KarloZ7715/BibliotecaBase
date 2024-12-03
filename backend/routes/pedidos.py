@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from typing import List
 import models, schemas
 from dependencies import get_db, get_current_user
@@ -46,10 +46,25 @@ def obtener_pedidos(
     usuario: models.Usuario = Depends(get_current_user),
 ):
     if usuario.rol == "admin":
-        pedidos = db.query(models.Pedido).offset(skip).limit(limit).all()
+        pedidos = (
+            db.query(models.Pedido)
+            .options(
+                joinedload(models.Pedido.detallepedido).joinedload(
+                    models.DetallePedido.libro
+                )
+            )
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
     else:
         pedidos = (
             db.query(models.Pedido)
+            .options(
+                joinedload(models.Pedido.detallepedido).joinedload(
+                    models.DetallePedido.libro
+                )
+            )
             .filter(models.Pedido.id_usuario == usuario.id_usuario)
             .offset(skip)
             .limit(limit)

@@ -115,6 +115,7 @@ class DetallePedidoCreate(BaseModel):
 
 class DetallePedido(DetallePedidoBase):
     id_detallepedido: int
+    libro: Optional[Libro] = None
 
     class Config:
         orm_mode = True

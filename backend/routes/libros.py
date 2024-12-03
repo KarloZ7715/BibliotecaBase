@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session, joinedload, load_only
 from typing import List
 import models
 import schemas
 from dependencies import get_db, get_current_user
 import random
+from sqlalchemy import func
 
 router = APIRouter(
     prefix="/libros",
@@ -36,7 +37,7 @@ def obtener_libros(skip: int = 0, limit: int = 100, db: Session = Depends(get_db
 
 
 @router.get("/random", response_model=List[schemas.Libro])
-def get_random_books(limit: int = Query(5, ge=1, le=10), db: Session = Depends(get_db)):
+def get_random_books(limit: int = Query(5, ge=1, le=20), db: Session = Depends(get_db)):
     total_books = db.query(models.Libro).count()
     if total_books == 0:
         return []
@@ -44,6 +45,34 @@ def get_random_books(limit: int = Query(5, ge=1, le=10), db: Session = Depends(g
     libros = db.query(models.Libro).options(joinedload(models.Libro.autor)).all()
     random_books = random.sample(libros, limit)
     return random_books
+
+
+@router.get("/destacados", response_model=List[schemas.Libro])
+def obtener_libros_destacados(db: Session = Depends(get_db)):
+    subquery = (
+        db.query(
+            models.Valoracion.id_libro,
+            func.avg(models.Valoracion.valoracion).label("avg_valoracion"),
+        )
+        .group_by(models.Valoracion.id_libro)
+        .subquery()
+    )
+    libros_filtrados = (
+        db.query(models.Libro)
+        .join(subquery, models.Libro.id_libro == subquery.c.id_libro)
+        .filter(subquery.c.avg_valoracion >= 4)
+        .options(joinedload(models.Libro.autor), joinedload(models.Libro.categoria))
+        .all()
+    )
+
+    if len(libros_filtrados) > 8:
+        import random
+
+        libros_destacados = random.sample(libros_filtrados, 8)
+    else:
+        libros_destacados = libros_filtrados
+
+    return libros_destacados
 
 
 @router.get("/buscar", response_model=List[schemas.Libro])
