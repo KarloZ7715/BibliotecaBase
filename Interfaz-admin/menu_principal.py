@@ -573,7 +573,7 @@ class AdminPanel:
                 connection.commit()
                 connection.close()
                 self.registrar_accion(
-                    "Insercción",
+                    "Inserción",
                     f"Libro {datos['Título']} agregado correctamente",
                 )
                 label_exito.config(text="Libro guardado correctamente.")
