@@ -3,13 +3,29 @@
 
 .book-carousel {
     margin-bottom: 40px;
+    padding: 0 20px;
 }
 
-.book-section-title {
+.section-title {
     text-align: center;
-    margin-bottom: 20px;
-    font-size: 2rem;
-    color: #333;
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    width: 60px;
+    height: 4px;
+    background-color: var(--color-accent);
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    transform: translateX(-50%);
+    border-radius: 2px;
 }
 
 .carousel-link {
@@ -20,7 +36,13 @@
     height: 100%;
 }
 
-.carousel-card {
+.carousel-img {
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.featured-card {
     max-width: 250px;
     margin: auto;
     transition: transform 0.3s, box-shadow 0.3s;
@@ -29,28 +51,31 @@
     height: 100%;
 }
 
-.carousel-card:hover {
+.featured-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
 }
 
-.carousel-img {
-    height: 300px;
-    object-fit: cover;
+@media (max-width: 992px) {
+    .carousel-img {
+        height: 180px;
+    }
 }
 
 @media (max-width: 768px) {
     .carousel-img {
-        height: 200px;
+        height: 150px;
+    }
+
+    .featured-card {
+        max-width: 200px;
     }
 }
-
 
 .slick-prev:before,
 .slick-next:before {
     color: #333 !important;
     font-size: 30px !important;
-
 }
 
 .slick-prev {
