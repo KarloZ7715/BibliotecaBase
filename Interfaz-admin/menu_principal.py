@@ -1193,7 +1193,8 @@ class AdminPanel:
             try:
                 connection = create_connection()
                 cursor = connection.cursor()
-                cursor.execute("DELETE FROM autores WHERE id_autor = %s", (id_autor))
+                # cursor.execute("DELETE FROM autores WHERE id_autor = %s", (id_autor))
+                cursor.execute(f"DELETE FROM autores WHERE id_autor = {id_autor}")
                 connection.commit()
                 connection.close()
                 self.registrar_accion("Eliminación", f"Autor {id_autor} eliminado")
